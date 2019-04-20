@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="6.11.2">
-<file name="C:\projects\siemens\weather\src\main\java\ru\siemens\123.java">
+<file name="C:\projects\siemens\weather\src\main\java\ru\siemens\Server.java">
+</file>
+<file name="C:\projects\siemens\weather\src\main\java\ru\siemens\ValidateInput.java">
+</file>
+<file name="C:\projects\siemens\weather\src\test\java\ru\siemens\ValidateInputTest.java">
 </file>
 </checkstyle>
