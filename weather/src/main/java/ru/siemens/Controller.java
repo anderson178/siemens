@@ -16,13 +16,16 @@ public class Controller {
 
     @GetMapping
     public List<String> getStr() {
-        return new ArrayList<>(Arrays.asList("1223", "hi", "bye"));
+       //JdbcTemplate jdbc = new JdbcTemplate();
+       // List<String> list = jdbc.queryForList("SELECT WIDTH FROM TEMPERATURE_INDICATORS", String.class);
+        return new JdbcTemplate().queryForList("SELECT WIDTH FROM TEMPERATURE_INDICATORS", String.class);
+       //return "wwwwwwwww";
     }
 
-    @PostMapping
+    /*@PostMapping
     public void postStr(String str) {
-        JdbcTemplate jdbc = new JdbcTemplate();
 
 
-    }
+
+    }*/
 }
