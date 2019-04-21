@@ -1,5 +1,9 @@
 package ru.siemens;
 
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+
 public class Server {
 
     public void start(String line) {
@@ -14,6 +18,10 @@ public class Server {
             System.out.println("Error inpud date");
         }
         return result;
+
+    }
+
+    public static void main(String[] args) {
 
     }
 
