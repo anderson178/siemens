@@ -21,6 +21,7 @@
     <modules>
         <module>weather</module>
         <module>client</module>
+        <module>sensor</module>
     </modules>
     <dependencies>
         <dependency>

@@ -3,7 +3,7 @@ package ru.siemens;
 import org.springframework.web.client.RestTemplate;
 
 public class Client {
-    private static final String URL_EMPLOYES = "http://127.0.0.1:8080/map";
+    private static final String URL_EMPLOYES = "http://127.0.0.1:8080/map/get";
 
     public static void main(String[] args) {
 
