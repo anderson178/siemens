@@ -1,12 +1,17 @@
 package ru.siemens;
 
 
+import com.fasterxml.jackson.core.JsonParser;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.web.bind.annotation.*;
-import ru.siemens.exception.ExceptionInvalidInput;
+
 
 
 import java.text.SimpleDateFormat;
@@ -38,17 +43,18 @@ public class Controller {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public void add(@RequestBody String value) {
-        ValidateInput validateInput = new ValidateInput(value);
-        if (validateInput.validate()) {
-            String values = "'" + validateInput.getWidth() + "','" + validateInput.getLongitude()
-                    + "','" + validateInput.getTemperature() + "','" + this.getCurrenntDataTime() + "'";
+    public void add(@RequestBody String str) throws ParseException {
+        JSONObject jsonObject = (JSONObject) JSONValue.parse(str);
+        String width = jsonObject.get("width").toString();
+        String longitude = jsonObject.get("longitude").toString();
+        String temperature = jsonObject.get("temperature").toString();
+        if (ValidateInput.checkWL(0, 90, width) && ValidateInput.checkWL(0, 180, longitude)
+                && ValidateInput.checkTemperature(-40,40,temperature)) {
+            String values = "'" + width + "','" + longitude + "','" + temperature + "','"
+                    + this.getCurrenntDataTime() + "'";
             jdbcTemplate.update("insert into temperature_indicators (width, longitude, temperature, datatime)"
                     + "values (" + values + ")");
-        } else {
-            throw new ExceptionInvalidInput();
         }
-
     }
 
     private String getCurrenntDataTime() {

@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ValidateInputTest {
-
+/*
     @Test
     public void whenInputWidthValidateIsFalse() {
         assertThat(new ValidateInput("1160.11212897=11.02145489=25").validate(), is(false));
@@ -74,5 +74,5 @@ public class ValidateInputTest {
         ValidateInput validateInput = new ValidateInput("60.11212897=110.02145489=34");
         validateInput.validate();
         assertThat(validateInput.getTemperature(), is(34));
-    }
+    }*/
 }
