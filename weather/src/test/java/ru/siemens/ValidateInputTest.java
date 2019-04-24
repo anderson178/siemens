@@ -6,73 +6,58 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ValidateInputTest {
-/*
+    private static final int MIN_W = 0;
+    private static final int MAX_W = 90;
+    private static final int MIN_L = 0;
+    private static final int MAX_L = 180;
+    private static final int MIN_T = -40;
+    private static final int MAX_T = 40;
+
     @Test
     public void whenInputWidthValidateIsFalse() {
-        assertThat(new ValidateInput("1160.11212897=11.02145489=25").validate(), is(false));
+        assertThat(ValidateInput.checkWL(MIN_W, MAX_W, "1160.11212897"), is(false));
     }
 
     @Test
     public void whenInputWidthExistSymbolValidateIsFalse() {
-        assertThat(new ValidateInput("p0.11212897=11.02145489=25").validate(), is(false));
+        assertThat(ValidateInput.checkWL(MIN_W, MAX_W, "6P.11212897"), is(false));
     }
 
     @Test
     public void whenInputWidthValidateIsTrue() {
-        assertThat(new ValidateInput("60.11212897=11.02145489=25").validate(), is(true));
+        assertThat(ValidateInput.checkWL(MIN_W, MAX_W, "60.11212897"), is(true));
     }
 
     @Test
     public void whenInputLongitudeValidateIsFalse() {
-        assertThat(new ValidateInput("60.11212897=243.02145489=25").validate(), is(false));
+        assertThat(ValidateInput.checkWL(MIN_L, MAX_L, "181.11212897"), is(false));
     }
 
     @Test
     public void whenInputLongitudeExistSymbolValidateIsFalse() {
-        assertThat(new ValidateInput("10.11212897=11.0E145489=25").validate(), is(false));
+        assertThat(ValidateInput.checkWL(MIN_L, MAX_L, "181.1P212897"), is(false));
     }
 
-
-        @Test
-    public void whenInputLongitudeValidateIsTrue() {
-        assertThat(new ValidateInput("60.11212897=110.02145489=25").validate(), is(true));
-    }
 
     @Test
-    public void whenInputTemperatureValidateIsFalse() {
-        assertThat(new ValidateInput("60.11212897=243.02145489=-10").validate(), is(false));
+    public void whenInputLongitudeValidateIsTrue() {
+        assertThat(ValidateInput.checkWL(MIN_L, MAX_L, "170.11212897"), is(true));
     }
 
     @Test
     public void whenInputTemperatureValidateIsTrue() {
-        assertThat(new ValidateInput("60.11212897=110.02145489=34").validate(), is(true));
+        assertThat(ValidateInput.checkTemperature(MIN_T, MAX_T, "-10"), is(true));
     }
 
     @Test
-    public void whenInputTemperatureExistSymbolValidateIsFalse() {
-        assertThat(new ValidateInput("40.11212897=11.02145489=2X").validate(), is(false));
-    }
-
-
-        @Test
-    public void whenGetWidth() {
-        ValidateInput validateInput = new ValidateInput("60.11212897=110.02145489=34");
-        validateInput.validate();
-        assertThat(validateInput.getWidth(), is(60.11212897));
+    public void whenInputTemperatureValidateIsFalse() {
+        assertThat(ValidateInput.checkTemperature(MIN_T, MAX_T, "50"), is(false));
     }
 
 
     @Test
-    public void whenGetLongitudeTrue() {
-        ValidateInput validateInput = new ValidateInput("60.11212897=110.02145489=34");
-        validateInput.validate();
-        assertThat(validateInput.getLongitude(), is(110.02145489));
+    public void whenInputTemperatureExistSymbolValidateIsFalse() {
+        assertThat(ValidateInput.checkTemperature(MIN_T, MAX_T, "1V"), is(false));
     }
 
-    @Test
-    public void whenGetTemperature() {
-        ValidateInput validateInput = new ValidateInput("60.11212897=110.02145489=34");
-        validateInput.validate();
-        assertThat(validateInput.getTemperature(), is(34));
-    }*/
 }

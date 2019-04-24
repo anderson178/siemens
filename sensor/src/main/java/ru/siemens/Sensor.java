@@ -11,21 +11,13 @@ public class Sensor {
     private static final String URL = "http://127.0.0.1:8080/map/add";
 
 
-    private JSONObject toJason(String widt, String longitude, String temperature) throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("width", widt);
-        jsonObject.put("longitude", longitude);
-        jsonObject.put("temperature", temperature);
-        return jsonObject;
-    }
-
-    public void sent(String width, String longitude, String temperature) throws JSONException {
-        ResponseEntity<String> responseEntity = new RestTemplate().postForEntity(
-                URL, toJason(width, longitude, temperature).toString(), String.class);
+    public void sent(Metering metering) throws JSONException {
+        ResponseEntity<Metering> responseEntity = new RestTemplate().postForEntity(
+                URL, metering, Metering.class);
         System.out.println(responseEntity.getStatusCode());
     }
 
     public static void main(String[] args) throws JSONException {
-        new Sensor().sent("41.32405764", "31.13245764", "39");
+        new Sensor().sent(new Metering("41.32405764", "01.13245764", "39"));
     }
 }

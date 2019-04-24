@@ -1,10 +1,8 @@
 package ru.siemens;
 
 
-import net.minidev.json.JSONObject;
-import net.minidev.json.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+
 
 @RestController
 @RequestMapping(value = "/map")
@@ -27,11 +27,10 @@ public class Controller {
     private static final int MAXT = 40;
     private SqlRowSet srs;
 
-    @Qualifier("jdbcTemplate")
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
+//produces =
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<String> getStr() {
         srs = jdbcTemplate.queryForRowSet(QUERYGET);
@@ -45,11 +44,10 @@ public class Controller {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public void add(@RequestBody String str) {
-        JSONObject jsonObject = (JSONObject) JSONValue.parse(str);
-        String width = jsonObject.get("width").toString();
-        String longitude = jsonObject.get("longitude").toString();
-        String temperature = jsonObject.get("temperature").toString();
+    public void add(@RequestBody Metering metering) {
+        String width = metering.getWidth();
+        String longitude = metering.getLongitude();
+        String temperature = metering.getTemperature();
         if (ValidateInput.checkWL(MINW, MAXW, width) && ValidateInput.checkWL(MINL, MAXL, longitude)
                 && ValidateInput.checkTemperature(MINT, MAXT, temperature)) {
             String values = "'" + width + "','" + longitude + "','" + temperature + "','"
@@ -57,7 +55,7 @@ public class Controller {
             jdbcTemplate.update("insert into temperature_indicators (width, longitude, temperature, datatime)"
                     + "values (" + values + ")");
         } else {
-            throw new ExceptionInvalidInput();
+            throw new ExceptionInvalidInput("");
         }
 
     }

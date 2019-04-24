@@ -2,35 +2,52 @@ package ru.siemens;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes=Application.class)
+@TestPropertySource(locations="classpath:application.properties")
 public class ControllerTest {
-
-    @Mock
+    private static final String QUERYGET = "SELECT WIDTH, LONGITUDE, TEMPERATURE,DATATIME FROM TEMPERATURE_INDICATORS order by DATATIME desc LIMIT 5";
+    @Autowired
     private Controller controller;
 
-    @Qualifier("jdbcTemplate")
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
     @Test
-    public void whenGetMapping() {
+    public void whenGetMapping() throws Exception {
+        Connection connection = null;
+        Statement statement = null;
+        Class.forName("org.postgresql.Driver");
+        connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
+        statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(QUERYGET);
         List<String> list = new ArrayList<>();
-        list.add("66.12302121 36.3245764 3 2019-04-23 15:52:31");
-        List<String> tt = controller.getStr();
-        when(controller.getStr()).thenReturn(list);
+        while (resultSet.next()) {
+            list.add(resultSet.getDouble("width") + " " + resultSet.getDouble("longitude")
+                    + " " + resultSet.getInt("temperature")
+                    + " " + resultSet.getDate("datatime") + " " + resultSet.getTime("datatime"));
+
+
+        }
+        assertThat(controller.getStr(), is(list));
+
+
     }
 
 
