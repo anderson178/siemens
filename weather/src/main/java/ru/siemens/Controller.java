@@ -1,18 +1,15 @@
 package ru.siemens;
 
 
-import com.fasterxml.jackson.core.JsonParser;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
-import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.web.bind.annotation.*;
-
-
+import ru.siemens.exception.ExceptionInvalidInput;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +51,10 @@ public class Controller {
                     + this.getCurrenntDataTime() + "'";
             jdbcTemplate.update("insert into temperature_indicators (width, longitude, temperature, datatime)"
                     + "values (" + values + ")");
+        } else {
+            throw new ExceptionInvalidInput();
         }
+
     }
 
     private String getCurrenntDataTime() {
