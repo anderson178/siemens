@@ -3,7 +3,7 @@ package ru.siemens;
 
 public class ValidateInput {
     private final String str;
-    private String[] date = new String[3];
+    private String[] date = new String[]{"", "", ""};
 
 
     public ValidateInput(String str) {
@@ -20,7 +20,7 @@ public class ValidateInput {
     private boolean checkWL(int min, int max, String parameter, int indexDate) {
         boolean rst = false;
         String[] parsW = parameter.split("\\.");
-        if (parsW.length == 2 && this.isDigit(parsW[0]) && this.isDigit(parsW[1])) {
+        if (parsW.length == 2 && this.isDigit(parsW[0]) && parsW[1].length() == 8 && this.isDigit(parsW[1])) {
             int firstNumber = Integer.parseInt(parsW[0]);
             if (this.isInterval(min, max, firstNumber)) {
                 this.date[indexDate] = parameter;
@@ -65,7 +65,6 @@ public class ValidateInput {
     public int getTemperature() {
         return Integer.parseInt(this.date[2]);
     }
-
 
 
 }
