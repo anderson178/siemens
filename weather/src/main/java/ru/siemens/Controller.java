@@ -3,7 +3,6 @@ package ru.siemens;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
-import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +19,12 @@ import java.util.List;
 @RequestMapping(value = "/map")
 public class Controller {
     private static final String QUERYGET = "SELECT WIDTH, LONGITUDE, TEMPERATURE,DATATIME FROM TEMPERATURE_INDICATORS order by DATATIME desc LIMIT 5";
+    private static final int MINW = 0;
+    private static final int MAXW = 90;
+    private static final int MINL = 0;
+    private static final int MAXL = 180;
+    private static final int MINT = -40;
+    private static final int MAXT = 40;
     private SqlRowSet srs;
 
     @Qualifier("jdbcTemplate")
@@ -40,13 +45,13 @@ public class Controller {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public void add(@RequestBody String str) throws ParseException {
+    public void add(@RequestBody String str) {
         JSONObject jsonObject = (JSONObject) JSONValue.parse(str);
         String width = jsonObject.get("width").toString();
         String longitude = jsonObject.get("longitude").toString();
         String temperature = jsonObject.get("temperature").toString();
-        if (ValidateInput.checkWL(0, 90, width) && ValidateInput.checkWL(0, 180, longitude)
-                && ValidateInput.checkTemperature(-40,40,temperature)) {
+        if (ValidateInput.checkWL(MINW, MAXW, width) && ValidateInput.checkWL(MINL, MAXL, longitude)
+                && ValidateInput.checkTemperature(MINT, MAXT, temperature)) {
             String values = "'" + width + "','" + longitude + "','" + temperature + "','"
                     + this.getCurrenntDataTime() + "'";
             jdbcTemplate.update("insert into temperature_indicators (width, longitude, temperature, datatime)"

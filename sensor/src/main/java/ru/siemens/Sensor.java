@@ -26,6 +26,6 @@ public class Sensor {
     }
 
     public static void main(String[] args) throws JSONException {
-        new Sensor().sent("46.32405764", "36.13245764", "39");
+        new Sensor().sent("41.32405764", "31.13245764", "39");
     }
 }
