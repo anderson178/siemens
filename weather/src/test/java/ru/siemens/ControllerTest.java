@@ -5,8 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.EnableMBeanExport;
-import org.springframework.jmx.support.RegistrationPolicy;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -53,11 +51,7 @@ public class ControllerTest {
         assertThat(controller.getStr(), is(expected));
     }
 
-    @Test
-    public void whenPostMapping() throws SQLException, ClassNotFoundException {
-        Metering metering = new Metering("11.32405764", "22.13245764", "33");
-        String expected = metering.getWidth() + " " + metering.getLongitude() + " " + metering.getTemperature();
-        controller.add(metering);
+    private List<String> getOneElementFromDataBase() throws SQLException, ClassNotFoundException {
         Class.forName("org.postgresql.Driver");
         this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
         this.statement = connection.createStatement();
@@ -68,32 +62,40 @@ public class ControllerTest {
                     + " " + resultSet.getDouble("longitude")
                     + " " + resultSet.getInt("temperature"));
         }
-        assertThat(result.get(0), is(expected));
+        return result;
+    }
+
+    @Test
+    public void whenPostMapping() throws SQLException, ClassNotFoundException {
+        Metering metering = new Metering("11.32405764", "22.13245764", "33");
+        String expected = metering.getWidth() + " " + metering.getLongitude() + " " + metering.getTemperature();
+        controller.add(metering);
+        assertThat(this.getOneElementFromDataBase().get(0), is(expected));
     }
 
     @Test(expected = ExceptionInvalidInput.class)
-    public void whenPostMappingExceptionInvalidInputTemperature()  {
+    public void whenPostMappingExceptionInvalidInputTemperature() {
         controller.add(new Metering("11.32405764", "22.13245764", "77"));
     }
 
     @Test(expected = ExceptionInvalidInput.class)
-    public void whenPostMappingExceptionInvalidInputWidth()  {
+    public void whenPostMappingExceptionInvalidInputWidth() {
         controller.add(new Metering("11.3240576P", "22.13245764", "33"));
     }
 
     @Test(expected = ExceptionInvalidInput.class)
-    public void whenPostMappingExceptionInvalidInputLongitude()  {
+    public void whenPostMappingExceptionInvalidInputLongitude() {
         controller.add(new Metering("11.32405764", "22.132457Msd4", "27"));
     }
 
     @Test
-    public void test() throws JSONException {
-      application.start();
-       Sensor sensor = new Sensor();
-        sensor.sent(new Metering("11.11111764", "22.13284574", "32"));
-        int p =0;
+    public void test() throws JSONException, SQLException, ClassNotFoundException {
+        application.start();
+        Metering metering = new Metering("11.22222222", "22.13245764", "33");
+        String expected = metering.getWidth() + " " + metering.getLongitude() + " " + metering.getTemperature();
+        new Sensor().sent(metering);
+        assertThat(this.getOneElementFromDataBase().get(0), is(expected));
     }
-
 
 
 }
