@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.siemens.exception.ExceptionInvalidInput;
-import ru.siemens.Sensor;
+
 
 
 import java.sql.*;
@@ -23,7 +23,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @TestPropertySource(locations = "classpath:application.properties")
-//@EnableMBeanExport(registration= RegistrationPolicy.IGNORE_EXISTING)
 public class ControllerTest {
     private static final String QUERY_GET_TEN = "SELECT WIDTH, LONGITUDE, TEMPERATURE, DATATIME FROM TEMPERATURE_INDICATORS order by ID desc LIMIT 10";
     private static final String QUERY_GET_ONE = "SELECT WIDTH, LONGITUDE, TEMPERATURE FROM TEMPERATURE_INDICATORS order by ID desc LIMIT 1";
@@ -37,32 +36,7 @@ public class ControllerTest {
 
     @Test
     public void whenGetMapping() throws SQLException, ClassNotFoundException {
-        Class.forName("org.postgresql.Driver");
-        this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
-        this.statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(QUERY_GET_TEN);
-        List<String> expected = new ArrayList<>();
-        while (resultSet.next()) {
-            expected.add(resultSet.getDouble("width") + " " + resultSet.getDouble("longitude")
-                    + " " + resultSet.getInt("temperature")
-                    + " " + resultSet.getDate("datatime") + " " + resultSet.getTime("datatime"));
-        }
-
-        assertThat(controller.getStr(), is(expected));
-    }
-
-    private List<String> getOneElementFromDataBase() throws SQLException, ClassNotFoundException {
-        Class.forName("org.postgresql.Driver");
-        this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
-        this.statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(QUERY_GET_ONE);
-        List<String> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(resultSet.getDouble("width")
-                    + " " + resultSet.getDouble("longitude")
-                    + " " + resultSet.getInt("temperature"));
-        }
-        return result;
+        assertThat(controller.getStr(), is(this.getTenElementsFromDataBase()));
     }
 
     @Test
@@ -89,12 +63,46 @@ public class ControllerTest {
     }
 
     @Test
-    public void test() throws JSONException, SQLException, ClassNotFoundException {
+    public void whentSentPostRequestViaMethodSensor() throws JSONException, SQLException, ClassNotFoundException {
         application.start();
         Metering metering = new Metering("11.22222222", "22.13245764", "33");
         String expected = metering.getWidth() + " " + metering.getLongitude() + " " + metering.getTemperature();
         new Sensor().sent(metering);
         assertThat(this.getOneElementFromDataBase().get(0), is(expected));
+    }
+
+    @Test
+    public void whenClientGetRequestViaMethodClient() throws  SQLException, ClassNotFoundException {
+        application.start();
+        assertThat(new Client().get(), is(this.getTenElementsFromDataBase()));
+    }
+
+    private List<String> getTenElementsFromDataBase() throws SQLException, ClassNotFoundException {
+        Class.forName("org.postgresql.Driver");
+        this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
+        this.statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(QUERY_GET_TEN);
+        List<String> result= new ArrayList<>();
+        while (resultSet.next()) {
+            result.add(resultSet.getDouble("width") + " " + resultSet.getDouble("longitude")
+                    + " " + resultSet.getInt("temperature")
+                    + " " + resultSet.getDate("datatime") + " " + resultSet.getTime("datatime"));
+        }
+        return result;
+    }
+
+    private List<String> getOneElementFromDataBase() throws SQLException, ClassNotFoundException {
+        Class.forName("org.postgresql.Driver");
+        this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
+        this.statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(QUERY_GET_ONE);
+        List<String> result = new ArrayList<>();
+        while (resultSet.next()) {
+            result.add(resultSet.getDouble("width")
+                    + " " + resultSet.getDouble("longitude")
+                    + " " + resultSet.getInt("temperature"));
+        }
+        return result;
     }
 
 
