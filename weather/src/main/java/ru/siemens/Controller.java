@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/map")
 public class Controller {
-    private static final String QUERYGET = "SELECT WIDTH, LONGITUDE, TEMPERATURE,DATATIME FROM TEMPERATURE_INDICATORS order by DATATIME desc LIMIT 5";
+    private static final String QUERY_GET_TEN = "SELECT WIDTH, LONGITUDE, TEMPERATURE,DATATIME FROM TEMPERATURE_INDICATORS order by DATATIME desc LIMIT 10";
     private static final int MINW = 0;
     private static final int MAXW = 90;
     private static final int MINL = 0;
@@ -33,7 +33,7 @@ public class Controller {
 //produces =
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<String> getStr() {
-        srs = jdbcTemplate.queryForRowSet(QUERYGET);
+        srs = jdbcTemplate.queryForRowSet(QUERY_GET_TEN);
         List<String> rst = new ArrayList<>();
         while (srs.next()) {
             rst.add(srs.getString("WIDTH") + " " + srs.getString("LONGITUDE")
