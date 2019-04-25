@@ -1,13 +1,17 @@
 package ru.siemens;
 
+import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.EnableMBeanExport;
+import org.springframework.jmx.support.RegistrationPolicy;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.siemens.exception.ExceptionInvalidInput;
+import ru.siemens.Sensor;
 
 
 import java.sql.*;
@@ -21,20 +25,23 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @TestPropertySource(locations = "classpath:application.properties")
+//@EnableMBeanExport(registration= RegistrationPolicy.IGNORE_EXISTING)
 public class ControllerTest {
     private static final String QUERY_GET_TEN = "SELECT WIDTH, LONGITUDE, TEMPERATURE, DATATIME FROM TEMPERATURE_INDICATORS order by ID desc LIMIT 10";
     private static final String QUERY_GET_ONE = "SELECT WIDTH, LONGITUDE, TEMPERATURE FROM TEMPERATURE_INDICATORS order by ID desc LIMIT 1";
-
+    private Connection connection;
+    private Statement statement;
     @Autowired
     private Controller controller;
 
+    @Autowired
+    private Application application;
+
     @Test
     public void whenGetMapping() throws SQLException, ClassNotFoundException {
-        Connection connection = null;
-        Statement statement = null;
         Class.forName("org.postgresql.Driver");
-        connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
-        statement = connection.createStatement();
+        this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
+        this.statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(QUERY_GET_TEN);
         List<String> expected = new ArrayList<>();
         while (resultSet.next()) {
@@ -51,11 +58,9 @@ public class ControllerTest {
         Metering metering = new Metering("11.32405764", "22.13245764", "33");
         String expected = metering.getWidth() + " " + metering.getLongitude() + " " + metering.getTemperature();
         controller.add(metering);
-        Connection connection = null;
-        Statement statement = null;
         Class.forName("org.postgresql.Driver");
-        connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
-        statement = connection.createStatement();
+        this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
+        this.statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(QUERY_GET_ONE);
         List<String> result = new ArrayList<>();
         while (resultSet.next()) {
@@ -65,8 +70,6 @@ public class ControllerTest {
         }
         assertThat(result.get(0), is(expected));
     }
-
-
 
     @Test(expected = ExceptionInvalidInput.class)
     public void whenPostMappingExceptionInvalidInputTemperature()  {
@@ -81,6 +84,14 @@ public class ControllerTest {
     @Test(expected = ExceptionInvalidInput.class)
     public void whenPostMappingExceptionInvalidInputLongitude()  {
         controller.add(new Metering("11.32405764", "22.132457Msd4", "27"));
+    }
+
+    @Test
+    public void test() throws JSONException {
+      application.start();
+       Sensor sensor = new Sensor();
+        sensor.sent(new Metering("11.11111764", "22.13284574", "32"));
+        int p =0;
     }
 
 
