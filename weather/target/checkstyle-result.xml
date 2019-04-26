@@ -4,7 +4,17 @@
 </file>
 <file name="C:\projects\siemens\weather\src\main\java\ru\siemens\Controller.java">
 </file>
+<file name="C:\projects\siemens\weather\src\main\java\ru\siemens\exception\ExceptionInvalidInput.java">
+</file>
+<file name="C:\projects\siemens\weather\src\main\java\ru\siemens\Metering.java">
+</file>
 <file name="C:\projects\siemens\weather\src\main\java\ru\siemens\ValidateInput.java">
+</file>
+<file name="C:\projects\siemens\weather\src\test\java\ru\siemens\ControllerTest.java">
+</file>
+<file name="C:\projects\siemens\weather\src\test\java\ru\siemens\TestViaClient.java">
+</file>
+<file name="C:\projects\siemens\weather\src\test\java\ru\siemens\TestViaSensor.java">
 </file>
 <file name="C:\projects\siemens\weather\src\test\java\ru\siemens\ValidateInputTest.java">
 </file>

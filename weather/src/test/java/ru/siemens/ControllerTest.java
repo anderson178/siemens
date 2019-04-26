@@ -1,6 +1,6 @@
 package ru.siemens;
 
-import org.json.JSONException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -11,7 +11,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.siemens.exception.ExceptionInvalidInput;
 
 
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +18,13 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+/**
+ * @author Денис Мироненко
+ * @version $Id$
+ * @since 26.04.2019
+ * <p>
+ * The class checks the operation of the Controller class methods.
+ */
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -34,6 +40,11 @@ public class ControllerTest {
     @Test
     public void whenGetMapping() throws SQLException, ClassNotFoundException {
         assertThat(controller.getStr(), is(this.getTenElementsFromDataBase()));
+    }
+
+    @Test(expected = ExceptionInvalidInput.class)
+    public void whenPostMappingExceptionInvalidInputLongitude() {
+        controller.add(new Metering("11.32405764", "22.132457Msd4", "27"));
     }
 
     @Test
@@ -59,7 +70,7 @@ public class ControllerTest {
         this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
         this.statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(QUERY_GET_TEN);
-        List<String> result= new ArrayList<>();
+        List<String> result = new ArrayList<>();
         while (resultSet.next()) {
             result.add(resultSet.getDouble("width") + " " + resultSet.getDouble("longitude")
                     + " " + resultSet.getInt("temperature")

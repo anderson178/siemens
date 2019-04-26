@@ -12,10 +12,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Денис Мироненко
+ * @version $Id$
+ * @since 26.04.2019
+ * <p>
+ * Processing class get and post requests
+ */
+
+
 @RestController
 @RequestMapping(value = "/map")
 public class Controller {
-    private static final String QUERY_GET_TEN = "SELECT WIDTH, LONGITUDE, TEMPERATURE,DATATIME FROM TEMPERATURE_INDICATORS order by DATATIME desc LIMIT 10";
+    private static final String QUERY_GET_TEN = "SELECT WIDTH, LONGITUDE, TEMPERATURE,DATATIME FROM TEMPERATURE_INDICATORS order by ID desc LIMIT 10";
     private static final int MIN_W = 0;
     private static final int MAX_W = 90;
     private static final int MIN_L = 0;
@@ -27,7 +36,11 @@ public class Controller {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-//produces =
+    /**
+     * Processing method get request
+     *
+     * @return
+     */
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public List<String> getStr() {
         srs = jdbcTemplate.queryForRowSet(QUERY_GET_TEN);
@@ -40,6 +53,15 @@ public class Controller {
         return rst;
     }
 
+    /**
+     * Processing method post requestю.
+     * Accepts object class metering. Retrieves a set of marameters.
+     * Checks for validates input parameters.
+     * If everything is in order, it will write to the database, otherwise it will throw an
+     * exception and send the status BED_REQUEST
+     *
+     * @param metering - object of class Metering
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public void add(@RequestBody Metering metering) {
         String width = metering.getWidth();
@@ -52,11 +74,16 @@ public class Controller {
             jdbcTemplate.update("insert into temperature_indicators (width, longitude, temperature, datatime)"
                     + "values (" + values + ")");
         } else {
-            throw new ExceptionInvalidInput("");
+            throw new ExceptionInvalidInput("invalid data input");
         }
 
     }
 
+    /**
+     * Method that forms the current date and time
+     *
+     * @return
+     */
     private String getCurrenntDataTime() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }

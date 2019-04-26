@@ -15,6 +15,14 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 
+/**
+ * @author Денис Мироненко
+ * @version $Id$
+ * @since 26.04.2019
+ * <p>
+ * The class checks the application using the Client class.
+ */
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @TestPropertySource(locations = "classpath:application.properties")
@@ -37,7 +45,7 @@ public class TestViaClient {
         this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/weather", "postgres", "password123");
         this.statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(QUERY_GET_TEN);
-        List<String> result= new ArrayList<>();
+        List<String> result = new ArrayList<>();
         while (resultSet.next()) {
             result.add(resultSet.getDouble("width") + " " + resultSet.getDouble("longitude")
                     + " " + resultSet.getInt("temperature")

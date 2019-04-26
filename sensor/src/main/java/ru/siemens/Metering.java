@@ -1,5 +1,13 @@
 package ru.siemens;
 
+/**
+ * @author Денис Мироненко
+ * @version $Id$
+ * @since 26.04.2019
+ * <p>
+ * Class forming the structure of parameters
+ */
+
 public class Metering {
     private String width;
     private String longitude;

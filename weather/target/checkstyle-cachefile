@@ -1,8 +1,13 @@
-#Tue Apr 23 11:55:14 MSK 2019
-C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\ValidateInput.java=1555958839706
+#Fri Apr 26 09:42:33 MSK 2019
+C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\Metering.java=1556260074319
 configuration*?=BEB9F1B9EB00374FFDF85778C3C0EC69CD0DE68B
-C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\123.java=1555772370670
+C\:\\projects\\siemens\\weather\\src\\test\\java\\ru\\siemens\\ControllerTest.java=1556260526248
+C\:\\projects\\siemens\\weather\\src\\test\\java\\ru\\siemens\\TestViaClient.java=1556260662757
 C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\Server.java=1555847342934
-C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\Application.java=1555847390756
-C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\Controller.java=1556009706373
-C\:\\projects\\siemens\\weather\\src\\test\\java\\ru\\siemens\\ValidateInputTest.java=1555959565240
+C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\Application.java=1556259546444
+C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\Controller.java=1556260179259
+C\:\\projects\\siemens\\weather\\src\\test\\java\\ru\\siemens\\TestViaSensor.java=1556260662789
+C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\ValidateInput.java=1556260452189
+C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\123.java=1555772370670
+C\:\\projects\\siemens\\weather\\src\\test\\java\\ru\\siemens\\ValidateInputTest.java=1556260741207
+C\:\\projects\\siemens\\weather\\src\\main\\java\\ru\\siemens\\exception\\ExceptionInvalidInput.java=1556259492459

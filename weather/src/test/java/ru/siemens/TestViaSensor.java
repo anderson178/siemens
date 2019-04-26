@@ -1,13 +1,12 @@
 package ru.siemens;
 
-import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ru.siemens.exception.ExceptionInvalidInput;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,6 +15,13 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+/**
+ * @author Денис Мироненко
+ * @version $Id$
+ * @since 26.04.2019
+ * <p>
+ * The class checks the application using the Sensor class.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @TestPropertySource(locations = "classpath:application.properties")
@@ -27,20 +33,12 @@ public class TestViaSensor {
     @Autowired
     private Application application;
 
-    @Autowired
-    private Controller controller;
-
-    @Test(expected = ExceptionInvalidInput.class)
-    public void whenPostMappingExceptionInvalidInputLongitude() {
-        controller.add(new Metering("11.32405764", "22.132457Msd4", "27"));
-    }
-
     @Test
-    public void whentSentPostRequestViaMethodSensor() throws JSONException, SQLException, ClassNotFoundException {
+    public void whentSentPostRequestViaMethodSensor() throws SQLException, ClassNotFoundException {
         application.start();
         Metering metering = new Metering("11.22222222", "22.13245764", "33");
         String expected = metering.getWidth() + " " + metering.getLongitude() + " " + metering.getTemperature();
-        new Sensor().sent(metering);
+        new Sensor().toSend(metering);
         assertThat(this.getOneElementFromDataBase().get(0), is(expected));
     }
 

@@ -5,6 +5,14 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+/**
+ * @author Денис Мироненко
+ * @version $Id$
+ * @since 26.04.2019
+ * <p>
+ * Validation class ValidateInput class
+ */
+
 public class ValidateInputTest {
     private static final int MIN_W = 0;
     private static final int MAX_W = 90;
@@ -38,7 +46,6 @@ public class ValidateInputTest {
         assertThat(ValidateInput.checkWL(MIN_L, MAX_L, "181.1P212897"), is(false));
     }
 
-
     @Test
     public void whenInputLongitudeValidateIsTrue() {
         assertThat(ValidateInput.checkWL(MIN_L, MAX_L, "170.11212897"), is(true));
@@ -53,7 +60,6 @@ public class ValidateInputTest {
     public void whenInputTemperatureValidateIsFalse() {
         assertThat(ValidateInput.checkTemperature(MIN_T, MAX_T, "50"), is(false));
     }
-
 
     @Test
     public void whenInputTemperatureExistSymbolValidateIsFalse() {
